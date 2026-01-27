@@ -149,7 +149,9 @@ def write_to_postgres(df_iter, table_name, engine, dataset):
     with engine.begin() as conn:
         first = True
         for df in tqdm(df_iter, desc=f"Ingesting {table_name}"):
+            
             if first:
+                df.columns = [c.lower() for c in df.columns]
                 # create table schema (no data)
                 df.head(0).to_sql(
                     name=table_name,
